@@ -8,7 +8,7 @@ string hello(int x)
         string x = "hey";
         return x;
     }
-    return x;
+    return;
 }
 
 int main()

@@ -23,3 +23,5 @@ compile: bnfc build
 test: bnfc build
 	@cd ../test && cabal -v0 run tester java
 
+test_grad: bnfc build
+	@cd ../test && cabal -v0 run tester java grad

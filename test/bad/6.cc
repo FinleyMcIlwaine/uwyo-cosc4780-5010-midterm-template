@@ -5,5 +5,13 @@ using std::string;
 int main()
 {
     string x, y, z;
-    x = 4 + x;
+    if (x == z)
+    {
+        int a = 4;
+    }
+    else
+    {
+        int b = 5;
+        return a;
+    }
 }

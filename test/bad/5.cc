@@ -1,5 +1,9 @@
 int main()
 {
     double x, y, z;
-    x = 4 + 4;
+    while (x == y)
+    {
+        int a = 5;
+    }
+    return a;
 }

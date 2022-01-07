@@ -6,9 +6,9 @@ string hello(string x)
 {
     {
         string x = "hey";
-        return 5;
+        return;
     }
-    return x;
+    return "hehe";
 }
 
 int main()
