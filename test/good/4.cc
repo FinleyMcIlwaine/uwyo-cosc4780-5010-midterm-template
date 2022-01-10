@@ -5,6 +5,7 @@ int main()
     y = 5;
     z++;
     x = add(y, z) - z * y / x;
+    return x;
 }
 
 int add(int x, int y)

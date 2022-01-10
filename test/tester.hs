@@ -50,47 +50,47 @@ run testGrad p =
   let total = if testGrad then 100 else 80
    in do
         good <-
-          map (ExitSuccess,) . sortOn ((read :: String -> Int) . takeWhile isDigit . takeFileName)
-            <$> ( (++) <$> (map ("good" </>) <$> listDirectory "good")
-                    <*> if testGrad then map (("grad" </>) . ("good" </>)) <$> listDirectory ("grad" </> "good") else pure []
+          map (ExitSuccess,) . sortOn ((read :: String -> Int) . takeWhile isDigit . takeFileName . fst)
+            <$> ( (++) <$> (map ((,2) . ("good" </>)) <$> listDirectory "good")
+                    <*> if testGrad then map ((,1) . ("grad" </>) . ("good" </>)) <$> listDirectory ("grad" </> "good") else pure []
                 )
         bad <-
-          map (ExitFailure 2,) . sortOn ((read :: String -> Int) . takeWhile isDigit . takeFileName)
-            <$> ( (++) <$> (map ("bad" </>) <$> listDirectory "bad")
-                    <*> if testGrad then map (("grad" </>) . ("bad" </>)) <$> listDirectory ("grad" </> "bad") else pure []
+          map (ExitFailure 2,) . sortOn ((read :: String -> Int) . takeWhile isDigit . takeFileName . fst)
+            <$> ( (++) <$> (map ((,2) . ("bad" </>)) <$> listDirectory "bad")
+                    <*> if testGrad then map ((,1) . ("grad" </>) . ("bad" </>)) <$> listDirectory ("grad" </> "bad") else pure []
                 )
-        score <- foldM (runFile testGrad p) 0 (good ++ bad)
+        let total = sum $ map (snd . snd) (bad ++ good)
+        score <- foldM (runFile total p) 0 (good ++ bad)
         putStrLn ""
         setSGR [SetColor Foreground Vivid Blue]
         putStrLn $ "testing complete, final (tentative) score: " ++ show score ++ "/" ++ show total
         setSGR [Reset]
 
-runFile :: Bool -> CreateProcess -> Int -> (ExitCode, FilePath) -> IO Int
-runFile grad process score (expect, filename) =
-  let total = if grad then 100 else 80
-   in do
-        putStrLn $ "typchecking file: " ++ filename ++ " ... "
-        source <- readFile filename
-        (Just stdin, Just stdout, Just stderr, ph) <- createProcess process
-        hPutStr stdin source
-        exitCode <- waitForProcess ph
-        output <- hGetContents stdout
-        if exitCode `matches` expect
-          then do
-            setSGR [SetColor Foreground Dull Green]
-            putStrLn $ "typecheck success! score: " ++ show (score + 2) ++ "/" ++ show total
-            setSGR [Reset]
-            return $ score + 2
-          else do
-            setSGR [SetColor Foreground Vivid Red]
-            putStrLn $ "typecheck failure! score: " ++ show score ++ "/" ++ show total
-            setSGR [Reset]
-            putStrLn $ "    expected typechecking to " ++ (if expect == ExitSuccess then "pass, but it failed!" else "fail, but it passed!")
-            putStrLn "    source program:"
-            putStrLn (unlines . map ("    " ++) $ lines source)
-            putStrLn "    typechecker standard output:"
-            putStrLn (unlines . map ("    " ++) $ lines output)
-            return score
+runFile :: Int -> CreateProcess -> Int -> (ExitCode, (FilePath, Int)) -> IO Int
+runFile total process score (expect, (filename, worth)) =
+  do
+    putStrLn $ "typchecking file: " ++ filename ++ " ... "
+    source <- readFile filename
+    (Just stdin, Just stdout, Just stderr, ph) <- createProcess process
+    hPutStr stdin source
+    exitCode <- waitForProcess ph
+    output <- hGetContents stdout
+    if exitCode `matches` expect
+      then do
+        setSGR [SetColor Foreground Dull Green]
+        putStrLn $ "type check success! score: " ++ show (score + worth) ++ "/" ++ show total
+        setSGR [Reset]
+        return $ score + worth
+      else do
+        setSGR [SetColor Foreground Vivid Red]
+        putStrLn $ "type check failure! score: " ++ show score ++ "/" ++ show total
+        setSGR [Reset]
+        putStrLn $ "    expected type checking to " ++ (if expect == ExitSuccess then "pass, but it failed!" else "fail, but it passed!")
+        putStrLn "    source program:"
+        putStrLn (unlines . map ("    " ++) $ lines source)
+        putStrLn "    type checker standard output:"
+        putStrLn (unlines . map ("    " ++) $ lines output)
+        return score
 
 matches :: ExitCode -> ExitCode -> Bool
 matches ExitSuccess ExitSuccess = True

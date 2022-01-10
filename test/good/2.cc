@@ -10,4 +10,5 @@ int main()
     y = 5;
     z = 6;
     x = add(y, z);
+    return 0;
 }

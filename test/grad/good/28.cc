@@ -11,6 +11,7 @@ int main()
         double x = i + 4.35;
         return x == 4.253;
     }
+    return 0;
 }
 
 bool x()
