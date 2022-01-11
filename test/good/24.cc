@@ -4,6 +4,7 @@ int main()
     {
         return x;
     }
+    return 0;
 }
 
 double thing()
@@ -14,4 +15,5 @@ double thing()
     {
         return 4.2252;
     }
+    return 0.0;
 }

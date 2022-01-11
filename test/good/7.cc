@@ -5,6 +5,5 @@ int main()
     {
         x--;
     }
-
     return x;
 }

@@ -9,7 +9,8 @@ string printf(string s)
     return (printf(s));
 }
 
-int main() {
-   printf("Hello, World!");
-   return 0;
+int main()
+{
+    printf("Hello, World!");
+    return 0;
 }

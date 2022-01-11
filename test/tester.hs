@@ -47,24 +47,23 @@ toTestProcess s = do
 
 run :: Bool -> CreateProcess -> IO ()
 run testGrad p =
-  let total = if testGrad then 100 else 80
-   in do
-        good <-
-          map (ExitSuccess,) . sortOn ((read :: String -> Int) . takeWhile isDigit . takeFileName . fst)
-            <$> ( (++) <$> (map ((,2) . ("good" </>)) <$> listDirectory "good")
-                    <*> if testGrad then map ((,1) . ("grad" </>) . ("good" </>)) <$> listDirectory ("grad" </> "good") else pure []
-                )
-        bad <-
-          map (ExitFailure 2,) . sortOn ((read :: String -> Int) . takeWhile isDigit . takeFileName . fst)
-            <$> ( (++) <$> (map ((,2) . ("bad" </>)) <$> listDirectory "bad")
-                    <*> if testGrad then map ((,1) . ("grad" </>) . ("bad" </>)) <$> listDirectory ("grad" </> "bad") else pure []
-                )
-        let total = sum $ map (snd . snd) (bad ++ good)
-        score <- foldM (runFile total p) 0 (good ++ bad)
-        putStrLn ""
-        setSGR [SetColor Foreground Vivid Blue]
-        putStrLn $ "testing complete, final (tentative) score: " ++ show score ++ "/" ++ show total
-        setSGR [Reset]
+  do
+    good <-
+      map (ExitSuccess,) . sortOn ((read :: String -> Int) . takeWhile isDigit . takeFileName . fst)
+        <$> ( (++) <$> (map ((,2) . ("good" </>)) <$> listDirectory "good")
+                <*> if testGrad then map ((,1) . ("grad" </>) . ("good" </>)) <$> listDirectory ("grad" </> "good") else pure []
+            )
+    bad <-
+      map (ExitFailure 2,) . sortOn ((read :: String -> Int) . takeWhile isDigit . takeFileName . fst)
+        <$> ( (++) <$> (map ((,2) . ("bad" </>)) <$> listDirectory "bad")
+                <*> if testGrad then map ((,1) . ("grad" </>) . ("bad" </>)) <$> listDirectory ("grad" </> "bad") else pure []
+            )
+    let total = sum $ map (snd . snd) (bad ++ good)
+    score <- foldM (runFile total p) 0 (good ++ bad)
+    putStrLn ""
+    setSGR [SetColor Foreground Vivid Blue]
+    putStrLn $ "testing complete, final (tentative) score: " ++ show score ++ "/" ++ show total
+    setSGR [Reset]
 
 runFile :: Int -> CreateProcess -> Int -> (ExitCode, (FilePath, Int)) -> IO Int
 runFile total process score (expect, (filename, worth)) =

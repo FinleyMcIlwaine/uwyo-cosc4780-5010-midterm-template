@@ -4,6 +4,7 @@ int factr(int n)
         return 1;
     else
         return (n * factr(n - 1));
+    return 0;
 }
 
 int main()

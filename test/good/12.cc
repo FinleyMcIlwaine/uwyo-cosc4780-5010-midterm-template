@@ -15,6 +15,7 @@ int go1(int x)
         return x;
     else
         return go2(x - 2);
+    return 0;
 }
 
 int go2(int x)
@@ -23,4 +24,5 @@ int go2(int x)
         return x;
     else
         return go1(x + 1);
+    return 0;
 }
