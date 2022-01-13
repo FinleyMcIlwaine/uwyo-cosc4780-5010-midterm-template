@@ -6,6 +6,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import bnfc.cpp.Absyn.*;
+
 import bnfc.cpp.Yylex;
 import bnfc.cpp.parser;
 
@@ -16,9 +18,9 @@ class Main {
         Reader input = new InputStreamReader(System.in);
         l = new Yylex(input);
         p = new parser(l, l.getSymbolFactory());
-        bnfc.cpp.Absyn.Program ast;
+        PDefs ast;
         try {
-            ast = p.pProgram();
+            ast = (PDefs) p.pProgram();
             
             // Successful parse! Typecheck here
 

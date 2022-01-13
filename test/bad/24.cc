@@ -1,4 +1,4 @@
-int main()
+int fn()
 {
     int x = 10;
     if (x == 10)
@@ -10,4 +10,9 @@ int main()
         x = 42;
     }
     // No (generally statically verifiably guaranteed) return! :o
+}
+
+int main()
+{
+    return 0;
 }

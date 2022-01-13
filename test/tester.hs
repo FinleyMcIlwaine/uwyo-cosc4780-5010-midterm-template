@@ -68,7 +68,7 @@ run testGrad p =
 runFile :: Int -> CreateProcess -> Int -> (ExitCode, (FilePath, Int)) -> IO Int
 runFile total process score (expect, (filename, worth)) =
   do
-    putStrLn $ "typchecking file: " ++ filename ++ " ... "
+    putStrLn $ "type checking file: " ++ filename ++ " ... "
     source <- readFile filename
     (Just stdin, Just stdout, Just stderr, ph) <- createProcess process
     hPutStr stdin source
