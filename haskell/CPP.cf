@@ -48,8 +48,6 @@ EAnd.    Exp4   ::= Exp4  "&&" Exp5 ;
 EOr.     Exp3   ::= Exp3  "||" Exp4 ;
 EAss.    Exp2   ::= Exp3 "=" Exp2 ;
 
-internal ETyped. Exp15 ::= "(" Exp ":" Type ")" ;
-
 coercions Exp 15 ;
 
 separator Exp "," ;
