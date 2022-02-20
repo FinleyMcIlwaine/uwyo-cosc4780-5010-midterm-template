@@ -1,0 +1,8 @@
+{
+  "image": "finleymcilwaine/uwyo-cosc4780:0.1.0",
+  "name": "COSC 4780 Workspace",
+  "extensions": ["haskell.haskell", "agurodriguez.vscode-lbnf", "redhat.java"],
+  "settings": {
+    "java.project.referencedLibraries": ["/root/.java/*.jar"]
+  }
+}

@@ -1,4 +1,4 @@
 *.class
 */bnfc
 *bnfc.mk*
-*/dist-newstyle
+**/dist-newstyle

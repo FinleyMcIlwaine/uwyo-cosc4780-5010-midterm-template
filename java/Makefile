@@ -21,7 +21,7 @@ compile: bnfc build
 	@java Main
 
 test: bnfc build
-	@cd ../test && cabal -v0 run tester java
+	@cd ./test && cabal -v0 run tester
 
 test_grad: bnfc build
-	@cd ../test && cabal -v0 run tester java grad
+	@cd ./test && cabal -v0 run tester grad

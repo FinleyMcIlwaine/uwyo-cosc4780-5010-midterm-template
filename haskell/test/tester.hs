@@ -17,19 +17,16 @@ main :: IO ()
 main = do
   args <- getArgs
   case args of
-    "haskell" : "grad" : _ -> toTestProcess "haskell" >>= run True
-    "haskell" : _ -> toTestProcess "haskell" >>= run False
-    "java" : "grad" : _ -> toTestProcess "java" >>= run True
-    "java" : _ -> toTestProcess "java" >>= run False
-    _ -> die "tester: bad arguments\nusage: tester <haskell | java>"
+    "grad" : _ -> toTestProcess >>= run True
+    _ -> toTestProcess >>= run False
 
-toTestProcess :: String -> IO CreateProcess
-toTestProcess s = do
+toTestProcess :: IO CreateProcess
+toTestProcess = do
   wd <- getCurrentDirectory
   return $
     CreateProcess
       { cmdspec = ShellCommand "make compile",
-        cwd = Just (takeDirectory wd </> s),
+        cwd = Just (takeDirectory wd),
         env = Nothing,
         std_in = CreatePipe,
         std_out = CreatePipe,

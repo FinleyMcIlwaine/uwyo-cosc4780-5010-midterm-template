@@ -16,7 +16,7 @@ compile: bnfc
 	@cabal run -v0 midterm
 
 test: bnfc
-	@cd ../test && cabal -v0 run tester haskell
+	@cd ./test && cabal -v0 run tester
 
 test_grad: bnfc
-	@cd ../test && cabal -v0 run tester haskell grad
+	@cd ./test && cabal -v0 run tester grad
